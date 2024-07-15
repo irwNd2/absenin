@@ -18,3 +18,13 @@ func (r *StudentRepository) Login(p *web.LoginPayload) (student models.Student, 
 func (r *StudentRepository) AddStudent(student *models.Student) error {
 	return r.DB.Create(student).Error
 }
+
+func (r *StudentRepository) UpdateStudentToken(userID uint, token string) error {
+	student := &models.Student{}
+	err := r.DB.Model(student).Where("id = ?", userID).First(student).Error
+	if err != nil {
+		return err
+	}
+	student.ExpoToken = &token
+	return r.DB.Save(student).Error
+}

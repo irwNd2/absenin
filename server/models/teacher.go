@@ -8,6 +8,7 @@ type Teacher struct {
 	Password  *string    `gorm:"not null" json:"password" binding:"required"`
 	Email     *string    `gorm:"unique" json:"email" binding:"required"`
 	Student   []Student  `gorm:"foreignKey:TeacherID"`
+	ExpoToken *string    `json:"expo_token"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"deleted_at,omitempty"`

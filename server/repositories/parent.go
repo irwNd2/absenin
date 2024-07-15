@@ -18,3 +18,13 @@ func (r *ParentRepository) Login(p *web.LoginPayload) (parent models.Parent, err
 func (r *ParentRepository) AddParent(parent *models.Parent) error {
 	return r.DB.Create(parent).Error
 }
+
+func (r *ParentRepository) UpdateParentToken(userID uint, token string) error {
+	parent := &models.Parent{}
+	err := r.DB.Model(parent).Where("id = ?", userID).First(parent).Error
+	if err != nil {
+		return err
+	}
+	parent.ExpoToken = &token
+	return r.DB.Save(parent).Error
+}
