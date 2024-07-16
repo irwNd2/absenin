@@ -14,3 +14,7 @@ func (r *NotificationRepository) GetNotifByToken(token string) ([]models.Notific
 	err := r.DB.Where("expo_token", token).Find(&notif).Error
 	return notif, err
 }
+
+func (r *NotificationRepository) AddNotification(notif *models.Notification) error {
+	return r.DB.Create(&notif).Error
+}

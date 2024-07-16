@@ -4,6 +4,7 @@ import (
 	"github.com/irwNd2/absenin/server/dto/mobile"
 	"github.com/irwNd2/absenin/server/models"
 	"github.com/irwNd2/absenin/server/repositories"
+	expo "github.com/oliveroneill/exponent-server-sdk-golang/sdk"
 )
 
 type NotificationService struct {
@@ -15,13 +16,46 @@ func (s *NotificationService) GetNotifByToken(p *mobile.TokenPayload) (notif []m
 	return notif, err
 }
 
-// func (s *NotificationService) SendNotificationToSingleId(p *mobile.SendNotificationPayload) error {
-// hit expo api
-//example
-// curl -H "Content-Type: application/json" -X POST "https://exp.host/--/api/v2/push/send" -d '{
-// 	"to": "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]",
-// 	"title":"hello",
-// 	"body": "world"
-//   }'
+func (s *NotificationService) SendNotificationToSingleId(p *mobile.SendNotificationPayload) error {
+	pushToken, err := expo.NewExponentPushToken(p.ToExpoToken)
 
+	if err != nil {
+		return err
+	}
+
+	client := expo.NewPushClient(nil)
+
+	response, err := client.Publish(
+		&expo.PushMessage{
+			To:       []expo.ExponentPushToken{pushToken},
+			Body:     p.Body,
+			Title:    p.Title,
+			Sound:    "default",
+			Priority: expo.DefaultPriority,
+		},
+	)
+
+	if err != nil {
+		return err
+	}
+	err = response.ValidateResponse()
+	if err != nil {
+		return err
+	}
+
+	notification := models.Notification{
+		ExpoToken: p.ToExpoToken,
+		Message:   p.Body,
+		Title:     p.Title,
+		IsRead:    false,
+	}
+
+	err = s.Repo.AddNotification(&notification)
+	return err
+
+}
+
+// func (s *NotificationService) AddNotification(notif *models.Notification) error {
+// 	err := s.Repo.AddNotification(notif)
+// 	return err
 // }
