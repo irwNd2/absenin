@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	apps "github.com/irwNd2/absenin/server/app"
 
 	"github.com/gofiber/fiber/v2"
@@ -35,10 +36,13 @@ func main() {
 		log.Fatal("Database migrating error")
 	}
 	app := fiber.New()
+	app.Use(cors.New())
 
 	apps.SetupParentRoutes(app, db)
 	apps.SetupStudentRoutes(app, db)
 	apps.SetupTeacherRoutes(app, db)
+	apps.SetupExpoTokenRoutes(app, db)
+	apps.SetupNotificationRoutes(app, db)
 
 	app.Listen(":3000")
 }

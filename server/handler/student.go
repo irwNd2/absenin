@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/irwNd2/absenin/server/dto/web"
 	"github.com/irwNd2/absenin/server/models"
@@ -15,10 +17,12 @@ func (h *StudentHandler) AuthLogin(ctx *fiber.Ctx) error {
 	var input web.LoginPayload
 	err := ctx.BodyParser(&input)
 	if err != nil {
+		fmt.Println(err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
 	}
 	res, err := h.Service.Login(&input)
 	if err != nil {
+		fmt.Println(err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "bad request"})
 	}
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": res})
