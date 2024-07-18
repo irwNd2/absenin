@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -42,6 +43,7 @@ func (s *TeacherService) Login(payload *web.LoginPayload) (res *web.LoginRespons
 	}
 	result := web.LoginResponse{
 		AccessToken: signedAccessToken,
+		UserId:      "teacher-" + strconv.Itoa(int(user.ID)),
 	}
 	return &result, err
 }

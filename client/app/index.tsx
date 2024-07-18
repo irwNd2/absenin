@@ -6,11 +6,11 @@ import {
   Button,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { getToken } from "@/utils/auth";
 import { useEffect, useState } from "react";
-import { removeToken } from "@/utils/auth";
+import { removeToken, getToken } from "@/utils/auth";
+// import { jwtDecode } from "jwt-decode";
 
-export default function Index() {
+export default async function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,6 +33,10 @@ export default function Index() {
     await removeToken();
     router.replace("/login");
   };
+
+  // const token = await getToken();
+  // const decodedToken = jwtDecode(token as string);
+  // console.log(decodedToken);
 
   if (loading) {
     return (

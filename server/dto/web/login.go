@@ -7,4 +7,5 @@ type LoginPayload struct {
 
 type LoginResponse struct {
 	AccessToken string `json:"access_token"`
+	UserId      string `json:"user_id"`
 }

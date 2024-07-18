@@ -1,10 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { View, Text, Button, TextInput, SafeAreaView } from "react-native";
-import { login } from "../actions/login";
+import { login } from "../../actions/login";
 import { router } from "expo-router";
-
-// import type { LoginPayload } from "../actions/login";
 
 const Login = () => {
   const [accountType, setAccountType] = useState<string>("");
@@ -80,11 +77,7 @@ const Login = () => {
               onChangeText={setPassword}
               placeholderTextColor={"black"}
             />
-            {error && (
-              <>
-                <Text className='text-red-700 ml-2'>{error}</Text>
-              </>
-            )}
+            {error ? <Text className='text-red-700 ml-2'>{error}</Text> : null}
 
             <View className='w-[300px] border rounded bg-blue-400'>
               <Button title='Masuk' color='#000000' onPress={handleLogin} />
