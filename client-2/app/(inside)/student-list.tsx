@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const InsidePage = () => {
+const StudentList = () => {
   return (
     <View>
-      <Text>Inside Page</Text>
+      <Text>StudentList</Text>
     </View>
   );
 };
 
-export default InsidePage;
+export default StudentList;
