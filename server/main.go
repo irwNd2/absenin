@@ -13,9 +13,9 @@ import (
 
 func main() {
 	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	config := &apps.Config{
 		Host:     os.Getenv("DB_HOST"),
