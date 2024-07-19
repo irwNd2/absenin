@@ -44,5 +44,11 @@ func main() {
 	apps.SetupExpoTokenRoutes(app, db)
 	apps.SetupNotificationRoutes(app, db)
 
-	app.Listen(":3000")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
+	app.Listen("0.0.0.0:" + port)
 }
