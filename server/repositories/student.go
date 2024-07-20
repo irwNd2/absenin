@@ -29,7 +29,7 @@ func (r *StudentRepository) UpdateStudentToken(userID uint, token string) error 
 	return r.DB.Save(student).Error
 }
 
-func (r *StudentRepository) GetStudentByTeacherId(teacherID uint) ([]models.Student, error) {
+func (r *StudentRepository) GetStudentByTeacherId(teacherID uint64) ([]models.Student, error) {
 	var students []models.Student
 	err := r.DB.Preload("Parent").Where("teacher_id = ?", teacherID).Find(&students).Error
 	if err != nil {

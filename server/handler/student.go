@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/irwNd2/absenin/server/dto/mobile"
 	"github.com/irwNd2/absenin/server/dto/web"
 	"github.com/irwNd2/absenin/server/models"
 	"github.com/irwNd2/absenin/server/services"
@@ -43,13 +43,13 @@ func (h *StudentHandler) AddStudent(ctx *fiber.Ctx) error {
 }
 
 func (h *StudentHandler) GetStudentByTeacherId(ctx *fiber.Ctx) error {
-	var input mobile.GetStudentByTeacherIDPayload
-	err := ctx.BodyParser(&input)
+	teacherIDParam := ctx.Params("teacherID")
+	teacherID, err := strconv.ParseUint(teacherIDParam, 10, 32)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "bad request"})
 	}
 
-	students, err := h.Service.GetStudentByTeacherId(&input)
+	students, err := h.Service.GetStudentByTeacherId(teacherID)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
 	}

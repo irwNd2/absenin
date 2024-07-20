@@ -57,8 +57,8 @@ func (s *StudentService) AddStudent(student *models.Student) error {
 	return err
 }
 
-func (s *StudentService) GetStudentByTeacherId(payload *mobile.GetStudentByTeacherIDPayload) ([]mobile.StudentDTO, error) {
-	students, err := s.Repo.GetStudentByTeacherId(payload.TeacherID)
+func (s *StudentService) GetStudentByTeacherId(teacherID uint64) ([]mobile.StudentDTO, error) {
+	students, err := s.Repo.GetStudentByTeacherId(teacherID)
 	if err != nil {
 		return nil, err
 	}
