@@ -16,7 +16,7 @@ func SetupNotificationRoutes(app *fiber.App, db *gorm.DB) {
 			},
 		},
 	}
-	api := app.Group("v1/notif")
-	api.Get("/getAll", handler.GetNotifByToken)
+	api := app.Group("/v1/notif")
+	api.Get("/getAll", handler.GetNotifByToken) // ubah ke get notif by user id
 	api.Post("/send-notification", handler.SendNotification)
 }

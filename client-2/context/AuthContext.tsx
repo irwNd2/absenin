@@ -1,12 +1,6 @@
-import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import {
-  Children,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthProps {
   authState: {
@@ -21,9 +15,16 @@ interface AuthProps {
   ) => Promise<any>;
   onLogout: () => Promise<any>;
   initialized: boolean;
+  authInfo: {
+    id: number | null;
+    email: string | null;
+    name: string | null;
+    role: string | null;
+  };
 }
 
 const TOKEN_KEY = "my-app-token";
+const AUTH_INFO = "auth-info";
 const API_URL = process.env.EXPO_PUBLIC_API;
 const AuthContext = createContext<Partial<AuthProps>>({});
 
@@ -40,11 +41,21 @@ export const AuthProvider = ({ children }: any) => {
     user_id: null,
   });
   const [initialized, setInitialized] = useState(false);
+  const [authInfo, setAuthInfo] = useState<{
+    id: number | null;
+    email: string | null;
+    name: string | null;
+    role: string | null;
+  }>({
+    id: null,
+    email: null,
+    name: null,
+    role: null,
+  });
 
   useEffect(() => {
     const loadToken = async () => {
       const data = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log(data);
       if (data) {
         const object = JSON.parse(data);
         setAuthState({
@@ -55,6 +66,19 @@ export const AuthProvider = ({ children }: any) => {
       }
       setInitialized(true);
     };
+    const loadAuthInfo = async () => {
+      const data = await SecureStore.getItemAsync(AUTH_INFO);
+      if (data) {
+        const object = JSON.parse(data);
+        setAuthInfo({
+          id: object.id,
+          email: object.email,
+          name: object.name,
+          role: object.role,
+        });
+      }
+    };
+    loadAuthInfo();
     loadToken();
   }, []);
 
@@ -84,6 +108,15 @@ export const AuthProvider = ({ children }: any) => {
       });
 
       await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(json));
+
+      const decodedToken: any = jwtDecode(json.data.access_token);
+      await SecureStore.setItemAsync(AUTH_INFO, JSON.stringify(decodedToken));
+      setAuthInfo({
+        id: decodedToken.id!,
+        name: decodedToken.name,
+        email: decodedToken.email,
+        role: decodedToken.role,
+      });
     } catch (error) {
       throw Error();
     }
@@ -97,6 +130,12 @@ export const AuthProvider = ({ children }: any) => {
       authenticated: false,
       user_id: null,
     });
+    setAuthInfo({
+      id: null,
+      email: null,
+      name: null,
+      role: null,
+    });
   };
 
   const value = {
@@ -104,6 +143,7 @@ export const AuthProvider = ({ children }: any) => {
     onLogout: logout,
     authState,
     initialized,
+    authInfo,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

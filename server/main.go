@@ -13,9 +13,9 @@ import (
 
 func main() {
 	err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	if err != nil { //comment this code when deploying to railway
+		log.Fatal(err)
+	}
 
 	config := &apps.Config{
 		Host:     os.Getenv("DB_HOST"),
@@ -47,7 +47,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = "8080"
+		port = "3000"
 	}
 
 	app.Listen("0.0.0.0:" + port)

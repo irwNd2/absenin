@@ -17,8 +17,8 @@ func (s *NotificationService) GetNotifByToken(p *mobile.TokenPayload) (notif []m
 }
 
 func (s *NotificationService) SendNotificationToSingleId(p *mobile.SendNotificationPayload) error {
+	// ubah logic. req mengirim id dan user type nya. kemudian di cocokkan ke db, apabila ada expo token maka dikirim jika tidak hanya insert notif ke db
 	pushToken, err := expo.NewExponentPushToken(p.ToExpoToken)
-
 	if err != nil {
 		return err
 	}

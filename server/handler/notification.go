@@ -22,7 +22,11 @@ func (h *NotificationHandler) GetNotifByToken(ctx *fiber.Ctx) error {
 
 func (h *NotificationHandler) SendNotification(ctx *fiber.Ctx) error {
 	var input mobile.SendNotificationPayload
-	err := h.Service.SendNotificationToSingleId(&input)
+	err := ctx.BodyParser(&input)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	err = h.Service.SendNotificationToSingleId(&input)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
 	}
