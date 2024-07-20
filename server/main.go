@@ -12,10 +12,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil { //comment this code when deploying to railway
-		log.Fatal(err)
-	}
+	godotenv.Load(".env")
 
 	config := &apps.Config{
 		Host:     os.Getenv("DB_HOST"),
