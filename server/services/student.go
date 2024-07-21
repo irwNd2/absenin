@@ -82,6 +82,7 @@ func (s *StudentService) GetStudentByTeacherId(teacherID uint64) ([]mobile.Stude
 					UpdatedAt: student.Parent.UpdatedAt,
 					CreatedAt: student.Parent.CreatedAt,
 				},
+				ExpoPushToken: student.Parent.ExpoToken,
 			},
 		}
 		studentDTOs = append(studentDTOs, studentDTO)

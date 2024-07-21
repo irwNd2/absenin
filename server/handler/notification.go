@@ -21,12 +21,12 @@ func (h *NotificationHandler) GetNotifByToken(ctx *fiber.Ctx) error {
 }
 
 func (h *NotificationHandler) SendNotification(ctx *fiber.Ctx) error {
-	var input mobile.SendNotificationPayload
-	err := ctx.BodyParser(&input)
+	var inputs []*mobile.SendNotificationPayload
+	err := ctx.BodyParser(&inputs)
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "bad request"})
 	}
-	err = h.Service.SendNotificationToSingleId(&input)
+	err = h.Service.SendNotificationToSingleId(inputs)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
 	}

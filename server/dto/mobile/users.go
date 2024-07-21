@@ -16,10 +16,11 @@ type UserDataResponse struct {
 
 type ParentDTO struct {
 	UserDataResponse
+	ExpoPushToken *string `json:"expo_token"`
 }
 
 type StudentDTO struct {
 	UserDataResponse
-	TeacherID uint `json:"teacher_id"`
-	Parent ParentDTO `json:"parent"`
+	TeacherID uint      `json:"teacher_id"`
+	Parent    ParentDTO `json:"parent"`
 }

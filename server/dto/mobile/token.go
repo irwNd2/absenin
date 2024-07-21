@@ -8,6 +8,7 @@ type SendNotificationPayload struct {
 	ToExpoToken string `json:"to"`
 	Title       string `json:"title"`
 	Body        string `json:"body"`
+	UserID      string `json:"user_id"`
 }
 
 type UpdateExpoTokenPayload struct {

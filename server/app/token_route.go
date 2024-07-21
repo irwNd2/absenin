@@ -16,5 +16,6 @@ func SetupExpoTokenRoutes(app *fiber.App, db *gorm.DB) {
 			StudentRepo: &repositories.StudentRepository{DB: db},
 		},
 	}
-	app.Post("/update-expo-token", expoTokenHandler.UpdateOrAddExpoToken)
+	api := app.Group("/v1")
+	api.Post("/update-expo-token", expoTokenHandler.UpdateOrAddExpoToken)
 }
