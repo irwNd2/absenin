@@ -13,7 +13,9 @@ import { sendNotification } from "@/api/notification";
 
 const StudentList = () => {
   const { authInfo } = useAuth();
-  const { data, error, isLoading } = useStudentsByTeacherID(authInfo?.id!);
+  const { data, error, isLoading, refetch } = useStudentsByTeacherID(
+    authInfo?.id!
+  );
   const [students, setStudents] = useState<Student[]>([]);
 
   useEffect(() => {
@@ -95,6 +97,12 @@ const StudentList = () => {
           </View>
         )}
       />
+      <TouchableOpacity
+        style={[styles.confirmButton, { marginBottom: 10 }]}
+        onPress={refetch}
+      >
+        <Text style={styles.textConfirm}>Manual Reload</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.confirmButton} onPress={confirm}>
         <Text style={styles.textConfirm}>Konfirmasi Kehadiran</Text>
       </TouchableOpacity>
