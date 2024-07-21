@@ -4,9 +4,26 @@ import Colors from "@/constants/Colors";
 import { TouchableOpacity } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import { UpdateExpoTokenPayload } from "@/types/ExpoToken";
+import { updateExpoToken } from "@/api/expoToken";
 
 const InsideLayout = () => {
-  const { onLogout, authState } = useAuth();
+  const { onLogout, authState, authInfo } = useAuth();
+  const payload: UpdateExpoTokenPayload = {
+    expo_token: null,
+    user_id: authInfo?.id!,
+    user_type: authInfo?.role?.toLocaleLowerCase()!,
+  };
+  const mutate = useMutation({
+    mutationFn: updateExpoToken,
+  });
+  const handleLogout = async () => {
+    if (onLogout) {
+      await onLogout();
+      mutate.mutate(payload);
+    }
+  };
 
   return (
     <Tabs
@@ -26,7 +43,10 @@ const InsideLayout = () => {
             return <Feather name='home' size={size} color={color} />;
           },
           headerRight: () => (
-            <TouchableOpacity style={{ marginRight: 10 }} onPress={onLogout}>
+            <TouchableOpacity
+              style={{ marginRight: 10 }}
+              onPress={handleLogout}
+            >
               <Ionicons name='log-out-outline' size={24} color='pink' />
             </TouchableOpacity>
           ),

@@ -10,6 +10,7 @@ export interface Student {
     email: string;
     updatedAt: string;
     createdAt: string;
+    expo_token: string | null;
   };
   is_checked?: boolean;
 }

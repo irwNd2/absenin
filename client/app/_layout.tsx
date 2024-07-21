@@ -4,11 +4,10 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
 const queryClient = new QueryClient();
 
 const InitialLayout = () => {
-  const { authState, initialized } = useAuth();
+  const { authState, initialized, authInfo } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 

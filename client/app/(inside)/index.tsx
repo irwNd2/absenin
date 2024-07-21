@@ -1,14 +1,30 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { useEffect } from "react";
 import { usePushNotification } from "@/hooks/usePushNotification";
 import { useAuth } from "@/context/AuthContext";
+import { updateExpoToken } from "@/api/expoToken";
+import { useMutation } from "@tanstack/react-query";
+import { UpdateExpoTokenPayload } from "@/types/ExpoToken";
 
 const InsidePage = () => {
-  const { authInfo, authState } = useAuth();
-  const { expoPushToken, notification } = usePushNotification();
+  const { authInfo } = useAuth();
+  const { expoPushToken } = usePushNotification();
+  const payload: UpdateExpoTokenPayload = {
+    expo_token: expoPushToken?.data!,
+    user_id: authInfo?.id!,
+    user_type: authInfo?.role?.toLocaleLowerCase()!,
+  };
+  const mutate = useMutation({
+    mutationFn: updateExpoToken,
+  });
 
-  console.log(expoPushToken?.data);
-  console.log(authInfo, authState);
+  useEffect(() => {
+    if (expoPushToken?.data) {
+      mutate.mutate(payload);
+    } else {
+      console.log("Expo token not found. Use Physical device");
+    }
+  }, [expoPushToken]);
   return (
     <View style={style.container}>
       <Text style={style.title}>Selamat datang {authInfo?.name}</Text>

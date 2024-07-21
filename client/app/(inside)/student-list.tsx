@@ -5,6 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useStudentsByTeacherID } from "@/hooks/useStudents";
 import { FlashList } from "@shopify/flash-list";
 import Checkbox from "expo-checkbox";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Colors from "@/constants/Colors";
+import { SendNotificationPayload } from "@/types/Notification";
+import { useMutation } from "@tanstack/react-query";
+import { sendNotification } from "@/api/notification";
 
 const StudentList = () => {
   const { authInfo } = useAuth();
@@ -27,10 +32,31 @@ const StudentList = () => {
     );
   };
 
+  const sendNotif = useMutation({
+    mutationFn: (payload: SendNotificationPayload[]) =>
+      sendNotification(payload),
+  });
+
+  const confirm = () => {
+    const payload: SendNotificationPayload[] = [];
+    students.forEach((student: Student) => {
+      const notif: SendNotificationPayload = {
+        to: student.parent.expo_token ? student.parent.expo_token : null,
+        title: "Kehadiran Siswa",
+        body: student.is_checked
+          ? `Anak anda ${student.name} hadir di sekolah hari ini`
+          : `Anak anda ${student.name} tidak hadir di sekolah hari ini`,
+        user_id: `parent-${student.parent.id}`,
+      };
+      payload.push(notif);
+    });
+    sendNotif.mutate(payload);
+  };
+
   if (isLoading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size='large' color='#0000ff' />;
+        <ActivityIndicator size='large' color='#0000ff' />
       </View>
     );
   }
@@ -42,7 +68,6 @@ const StudentList = () => {
     return <Text>No students found.</Text>;
   }
 
-  console.log(data);
   return (
     <View style={styles.container}>
       <FlashList
@@ -65,12 +90,14 @@ const StudentList = () => {
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 {item.name}
               </Text>
-              <Text>Email: {item.email}</Text>
-              <Text>Nama Orang Tua: {item.parent.name}</Text>
+              <Text>Orang Tua: {item.parent.name}</Text>
             </View>
           </View>
         )}
       />
+      <TouchableOpacity style={styles.confirmButton} onPress={confirm}>
+        <Text style={styles.textConfirm}>Konfirmasi Kehadiran</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -84,6 +111,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  confirmButton: {
+    padding: 20,
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+  },
+  textConfirm: {
+    textAlign: "center",
+    fontSize: 20,
+    color: "white",
   },
 });
 
