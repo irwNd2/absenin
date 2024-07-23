@@ -10,10 +10,18 @@ type SubjectService struct {
 }
 
 func (s *SubjectService) GetAllSubjectByOrgID(orgID uint) ([]models.Subject, error) {
-	students, err := s.Repo.GetAllSubjectByOrgID(orgID)
+	subjects, err := s.Repo.GetAllSubjectByOrgID(orgID)
 
 	if err != nil {
 		return nil, err
 	}
-	return students, nil
+	return subjects, nil
+}
+
+func (s *SubjectService) GetTeacherSubject(orgID uint, teacherID uint) ([]models.Subject, error) {
+	subjects, err := s.Repo.GetTeacherSubject(orgID, teacherID)
+	if err != nil {
+		return nil, err
+	}
+	return subjects, nil
 }

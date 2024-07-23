@@ -20,4 +20,5 @@ func SetupSubjectRoutes(app *fiber.App, db *gorm.DB) {
 	app.Use(middlewares.AuthMiddleware)
 	api := app.Group("/v1/subject")
 	api.Get("/all/:orgID", handler.GetAllSubjectByOrgID)
+	api.Get("/teacher", handler.GetTeacherSubject)
 }
