@@ -41,6 +41,7 @@ func main() {
 	apps.SetupExpoTokenRoutes(app, db)
 	apps.SetupNotificationRoutes(app, db)
 	apps.SetupSubjectRoutes(app, db)
+	apps.SetupStudentClassRoutes(app, db)
 
 	port := os.Getenv("PORT")
 
