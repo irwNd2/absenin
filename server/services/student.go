@@ -33,6 +33,7 @@ func (s *StudentService) Login(payload *web.LoginPayload) (res *web.LoginRespons
 		Email: *user.Email,
 		Name:  *user.Name,
 		Role:  "Student",
+		OrgID: user.OrganizationID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
