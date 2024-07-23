@@ -13,13 +13,6 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { TextInput } from "react-native-gesture-handler";
 import Colors from "@/constants/Colors";
 import { useAuth } from "@/context/AuthContext";
-import { useExpoToken } from "@/hooks/useExpoToken";
-
-enum Role {
-  teacher = "Guru",
-  student = "Siswa",
-  parent = "Orang Tua",
-}
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -39,7 +32,6 @@ const Page = () => {
     setLoading(true);
     try {
       await onLogin!(email, password, role!);
-
     } catch (error) {
       Alert.alert("Error", "Cant login");
     } finally {

@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
 import { TouchableOpacity } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { UpdateExpoTokenPayload } from "@/types/ExpoToken";
@@ -62,6 +62,18 @@ const InsideLayout = () => {
           title: "Daftar Siswa",
           tabBarIcon: ({ color, size }) => {
             return <Ionicons name='person' size={size} color={color} />;
+          },
+        }}
+      ></Tabs.Screen>
+      <Tabs.Screen
+        name='attendance-list'
+        options={{
+          href: authState?.user_id?.includes("teacher")
+            ? "/attendance-list"
+            : null,
+          title: "Daftar Absen",
+          tabBarIcon: ({ color, size }) => {
+            return <FontAwesome name='list-ul' size={size} color={color} />;
           },
         }}
       ></Tabs.Screen>

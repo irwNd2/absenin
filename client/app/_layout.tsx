@@ -4,6 +4,8 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 const queryClient = new QueryClient();
 
 const InitialLayout = () => {
@@ -27,6 +29,18 @@ const InitialLayout = () => {
     <Stack>
       <Stack.Screen name='index' options={{ headerShown: false }} />
       <Stack.Screen name='(inside)' options={{ headerShown: false }} />
+      <Stack.Screen
+        name='(modals)/add-attendance'
+        options={{
+          presentation: "modal",
+          title: "Tambah Daftar Hadir",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name='close-outline' size={24} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </Stack>
   );
 };
