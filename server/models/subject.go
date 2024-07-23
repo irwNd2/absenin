@@ -7,6 +7,7 @@ type Subject struct {
 	Name              *string             `json:"name"`
 	TeacherID         *uint               `json:"teacher_id"`
 	StudentAttendance []StudentAttendance `gorm:"foreignKey:SubjectID"`
+	OrganizationID    uint                `json:"org_id"`
 	CreatedAt         time.Time           `json:"created_at"`
 	UpdatedAt         time.Time           `json:"updated_at"`
 	DeletedAt         *time.Time          `gorm:"index" json:"deleted_at,omitempty"`
