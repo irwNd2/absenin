@@ -7,7 +7,7 @@ type Student struct {
 	Name                    *string                   `json:"name"`
 	Password                *string                   `gorm:"not null" json:"password" binding:"required"`
 	Email                   *string                   `gorm:"unique" json:"email" binding:"required"`
-	NISN                    string                    `json:"nisn"`
+	NISN                    *string                   `json:"nisn"`
 	ExpoToken               *string                   `json:"expo_token"`
 	ParentID                uint                      `json:"parent_id"`
 	Parent                  Parent                    `gorm:"foreignKey:ParentID"`

@@ -4,7 +4,7 @@ import "time"
 
 type StudentAttendance struct {
 	ID                      uint                      `gorm:"primary key;autoIncrement" json:"id"`
-	StudentClassID          uint                      `json:"class_student_id"`
+	StudentClassID          uint                      `json:"student_class_id"`
 	SubjectID               uint                      `json:"subject_id"`
 	TeacherID               uint                      `json:"teacher_id"`
 	StudentAttendanceDetail []StudentAttendanceDetail `gorm:"foreignKey:StudentAttendanceID"`
