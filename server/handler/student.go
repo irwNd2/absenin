@@ -31,6 +31,7 @@ func (h *StudentHandler) AuthLogin(ctx *fiber.Ctx) error {
 func (h *StudentHandler) AddStudent(ctx *fiber.Ctx) error {
 	student := new(models.Student)
 	err := ctx.BodyParser(student)
+	fmt.Println(err)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Bad request"})
 	}

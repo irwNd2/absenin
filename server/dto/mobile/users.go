@@ -21,6 +21,5 @@ type ParentDTO struct {
 
 type StudentDTO struct {
 	UserDataResponse
-	TeacherID uint      `json:"teacher_id"`
-	Parent    ParentDTO `json:"parent"`
+	Parent ParentDTO `json:"parent"`
 }

@@ -73,7 +73,6 @@ func (s *StudentService) GetStudentByTeacherId(teacherID uint64) ([]mobile.Stude
 				UpdatedAt: student.UpdatedAt,
 				CreatedAt: student.CreatedAt,
 			},
-			TeacherID: student.TeacherID,
 			Parent: mobile.ParentDTO{
 				UserDataResponse: mobile.UserDataResponse{
 					ID:        student.ParentID,

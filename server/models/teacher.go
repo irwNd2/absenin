@@ -7,7 +7,6 @@ type Teacher struct {
 	Name              *string             `json:"name"`
 	Password          *string             `gorm:"not null" json:"password" binding:"required"`
 	Email             *string             `gorm:"unique" json:"email" binding:"required"`
-	Student           []Student           `gorm:"foreignKey:TeacherID"`
 	Subject           []Subject           `gorm:"foreignKey:TeacherID"`
 	StudentAttendance []StudentAttendance `gorm:"foreignKey:TeacherID"`
 	NIP               string              `json:"nip"`

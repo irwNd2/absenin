@@ -11,7 +11,6 @@ type Student struct {
 	ExpoToken               *string                   `json:"expo_token"`
 	ParentID                uint                      `json:"parent_id"`
 	Parent                  Parent                    `gorm:"foreignKey:ParentID"`
-	TeacherID               uint                      `json:"teacher_id"`
 	OrganizationID          uint                      `json:"org_id"`
 	StudentClassID          uint                      `json:"student_class_id"`
 	StudentAttendanceDetail []StudentAttendanceDetail `gorm:"foreignKey:StudentID"`
