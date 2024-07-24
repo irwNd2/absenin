@@ -15,6 +15,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@gorhom/bottom-sheet": "^4.6.3",
+    "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-community/netinfo": "11.3.1",
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/native": "^6.0.2",
@@ -45,7 +46,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.3",
-    "react-native-dropdown-select-list": "^2.0.5",
+    "react-native-element-dropdown": "^2.12.1",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-loading-spinner-overlay": "^3.0.1",
