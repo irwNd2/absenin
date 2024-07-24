@@ -1,3 +1,6 @@
+import { Class } from "./Class";
+import { Subject } from "./Subject";
+
 export interface Student {
   id: number;
   name: string;
@@ -13,4 +16,15 @@ export interface Student {
     expo_token: string | null;
   };
   is_checked?: boolean;
+}
+
+export interface StudentAttendance {
+  id: number;
+  student_class_id: number;
+  student_class: Class;
+  subject_id: number;
+  subject: Subject;
+  teacher_id: number;
+  time: string;
+  student_attendance: any;
 }
