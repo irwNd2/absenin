@@ -18,6 +18,12 @@ export interface Student {
   is_checked?: boolean;
 }
 
+export interface StudentByClassID {
+  id: number;
+  name: string;
+  nisn: string;
+}
+
 export interface StudentAttendance {
   id: number;
   student_class_id: number;

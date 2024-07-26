@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getStudentByTeacherID } from "@/api/studentApi";
-import { Student } from "@/types/Student";
+import { getStudentByClassID, getStudentByTeacherID } from "@/api/studentApi";
+import { Student, StudentByClassID } from "@/types/Student";
+import QueryKey from "@/constants/QueryKey";
 
 export const useStudentsByTeacherID = (
   teacherID: number
@@ -8,5 +9,14 @@ export const useStudentsByTeacherID = (
   return useQuery<Student[], Error>({
     queryKey: ["students", teacherID],
     queryFn: () => getStudentByTeacherID(teacherID),
+  });
+};
+
+export const useStudentsByClassID = (
+  classID: number
+): UseQueryResult<StudentByClassID[], Error> => {
+  return useQuery<StudentByClassID[], Error>({
+    queryKey: [QueryKey.allStudentByClassID, classID],
+    queryFn: () => getStudentByClassID(classID),
   });
 };

@@ -30,7 +30,10 @@ const AttendanceList = () => {
           keyExtractor={(item) => item.id.toString()}
           estimatedItemSize={200}
           renderItem={({ item }: { item: StudentAttendance }) => (
-            <TouchableOpacity style={styles.listContainer}>
+            <TouchableOpacity
+              style={styles.listContainer}
+              onPress={() => router.navigate(`/attendance/${item.id}`)}
+            >
               <View
                 style={{
                   flexDirection: "row",
