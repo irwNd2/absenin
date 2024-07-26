@@ -12,6 +12,16 @@ const AttendanceList = () => {
   const { data: attendanceData } = useAttendance();
 
   const router = useRouter();
+
+  if (!attendanceData) {
+    return (
+      <View style={[styles.container, { padding: 20 }]}>
+        <Text style={{ fontFamily: "mon-semi" }}>
+          Belum ada absen yg dibuat
+        </Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       {attendanceData && (
@@ -60,13 +70,6 @@ const AttendanceList = () => {
           )}
         />
       )}
-      <View style={styles.addIcon}>
-        <TouchableOpacity
-          onPress={() => router.navigate("(modals)/add-attendance")}
-        >
-          <Entypo name='add-to-list' size={34} color='black' />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };

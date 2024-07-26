@@ -15,7 +15,14 @@ import { Dropdown } from "react-native-element-dropdown";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { dateFormat, timeFormat } from "@/utils/time";
+import { combineDateTime, dateFormat, timeFormat } from "@/utils/time";
+import Spinner from "react-native-loading-spinner-overlay";
+import { addStudentAttendance } from "@/api/attendance";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AddStudentAttendancePayload } from "@/types/Student";
+import { useAuth } from "@/context/AuthContext";
+import QueryKey from "@/constants/QueryKey";
+import { router } from "expo-router";
 
 const AddAttendance = () => {
   const { data: subjectList } = useAllSubject();
@@ -36,13 +43,10 @@ const AddAttendance = () => {
   const [time, setTime] = useState<Date>(new Date());
   const [showDateAndroid, setShowDateAndroid] = useState(false);
   const [showTimeAndroid, setShowTimeAndroid] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [isFocus, setIsFocus] = useState(false);
   const [isClassFocus, setIsClassFocus] = useState(false);
-
-  useEffect(() => {
-    console.log(time);
-  }, [time]);
 
   const onDateChange = (
     { type }: DateTimePickerEvent,
@@ -68,9 +72,43 @@ const AddAttendance = () => {
     }
   };
 
+  const { authInfo } = useAuth();
+
+  const addAttendance = useMutation({
+    mutationFn: addStudentAttendance,
+  });
+
+  const queryClient = useQueryClient();
+
+  const onAddStudentAttendance = async () => {
+    setLoading(true);
+    const payload: AddStudentAttendancePayload = {
+      student_class_id: selectedClassID!,
+      subject_id: selectedSubjectID!,
+      teacher_id: authInfo?.id!,
+      time: time.toISOString(),
+    };
+    addAttendance.mutate(payload, {
+      onSuccess: (res) => {
+        router.back();
+        const id = Number(res.data.data.id);
+        router.navigate(`/attendance/${id}`);
+        setLoading(false);
+        queryClient.invalidateQueries({
+          queryKey: [QueryKey.allAttendanceByTeacher],
+        });
+      },
+      onError: (err) => {
+        console.log(err);
+        setLoading(false);
+      },
+    });
+  };
+
   if (subjectData && classData) {
     return (
       <View style={styles.container}>
+        <Spinner visible={loading} />
         <View>
           <Text style={styles.title}>Pilih Mata Pelajaran</Text>
           <Dropdown
@@ -116,7 +154,7 @@ const AddAttendance = () => {
         </View>
         <Text style={styles.title}>Pilih Tanggal</Text>
         {Platform.OS === "ios" && (
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", marginLeft: -8 }}>
             <RNDateTimePicker
               minimumDate={new Date()}
               value={date}
@@ -180,7 +218,10 @@ const AddAttendance = () => {
             />
           </>
         )}
-        <TouchableOpacity style={styles.buttonConfirm}>
+        <TouchableOpacity
+          style={styles.buttonConfirm}
+          onPress={onAddStudentAttendance}
+        >
           <Text style={styles.btnText}>Tambah</Text>
         </TouchableOpacity>
       </View>
@@ -200,6 +241,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 10,
     fontSize: 20,
+    fontFamily: "mon-bold",
   },
   buttonConfirm: {
     borderRadius: 10,
@@ -223,6 +265,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    fontFamily: "mon",
   },
   icon: {
     marginRight: 5,

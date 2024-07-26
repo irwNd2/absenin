@@ -1,11 +1,9 @@
 import {
-  View,
   Text,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  Button,
   Alert,
 } from "react-native";
 import React, { useState } from "react";

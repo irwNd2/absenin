@@ -28,3 +28,10 @@ export interface StudentAttendance {
   time: string;
   student_attendance: any;
 }
+
+export interface AddStudentAttendancePayload {
+  student_class_id: number;
+  subject_id: number;
+  teacher_id: number;
+  time: string;
+}

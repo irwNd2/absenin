@@ -5,10 +5,11 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { FontAwesome } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +32,14 @@ const InitialLayout = () => {
     }
   }, [authState, initialized]);
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerTitleStyle: {
+          fontFamily: "mon-bold",
+          color: "white",
+        },
+      }}
+    >
       <Stack.Screen name='index' options={{ headerShown: false }} />
       <Stack.Screen name='(inside)' options={{ headerShown: false }} />
       <Stack.Screen
@@ -44,6 +52,20 @@ const InitialLayout = () => {
               <Ionicons name='close-outline' size={24} />
             </TouchableOpacity>
           ),
+        }}
+      />
+      <Stack.Screen
+        name='attendance/[id]'
+        options={{
+          title: "Absen Kelas",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Entypo name='chevron-left' size={24} color='white' />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: Colors.primary,
+          },
         }}
       />
     </Stack>

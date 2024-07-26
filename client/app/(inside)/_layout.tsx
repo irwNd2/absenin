@@ -1,7 +1,6 @@
-import React from "react";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
-import { TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
@@ -31,6 +30,10 @@ const InsideLayout = () => {
         headerStyle: {
           backgroundColor: Colors.primary,
         },
+        headerTitleStyle: {
+          fontFamily: "mon-bold",
+          fontSize: 18,
+        },
         headerTintColor: "#fff",
       }}
     >
@@ -38,7 +41,9 @@ const InsideLayout = () => {
         name='index'
         options={{
           title: "Beranda",
-
+          tabBarLabelStyle: {
+            fontFamily: "mon-bold",
+          },
           tabBarIcon: ({ color, size }) => {
             return <Feather name='home' size={size} color={color} />;
           },
@@ -75,6 +80,19 @@ const InsideLayout = () => {
           tabBarIcon: ({ color, size }) => {
             return <FontAwesome name='list-ul' size={size} color={color} />;
           },
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ marginRight: 10 }}
+              onPress={() => router.navigate("(modals)/add-attendance")}
+            >
+              {/* <Entypo name='add-to-list' size={30} color='black' /> */}
+              <Text
+                style={{ fontFamily: "mon-bold", fontSize: 18, color: "white" }}
+              >
+                Tambah
+              </Text>
+            </TouchableOpacity>
+          ),
         }}
       ></Tabs.Screen>
     </Tabs>
