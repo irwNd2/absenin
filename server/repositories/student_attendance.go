@@ -19,7 +19,7 @@ func (r *StudentAttendanceRepository) AddStudentAttendance(attendance *models.St
 
 func (r *StudentAttendanceRepository) GetAllByTeacher(teacherID uint) ([]models.StudentAttendance, error) {
 	var attendances []models.StudentAttendance
-	err := r.DB.Where("teacher_id = ?", teacherID).Preload("StudentClass").Preload("Subject").Find(&attendances).Error
+	err := r.DB.Where("teacher_id = ?", teacherID).Preload("StudentClass").Preload("Subject").Order("created_at desc").Find(&attendances).Error
 	if err != nil {
 		return nil, err
 	}
