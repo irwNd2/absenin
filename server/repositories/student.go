@@ -37,3 +37,12 @@ func (r *StudentRepository) GetStudentByTeacherId(teacherID uint64) ([]models.St
 	}
 	return students, nil
 }
+
+func (r *StudentRepository) GetStudentByClassID(classID uint) ([]models.Student, error) {
+	var students []models.Student
+	err := r.DB.Where("student_class_id = ?", classID).Find(&students).Error
+	if err != nil {
+		return nil, err
+	}
+	return students, nil
+}

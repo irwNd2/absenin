@@ -89,3 +89,20 @@ func (s *StudentService) GetStudentByTeacherId(teacherID uint64) ([]mobile.Stude
 	}
 	return studentDTOs, err
 }
+
+func (s *StudentService) GetStudentByClassID(classID uint) ([]web.StudentByClassDTO, error) {
+	students, err := s.Repo.GetStudentByClassID(classID)
+	if err != nil {
+		return nil, err
+	}
+	var studentByClassDTOs []web.StudentByClassDTO
+	for _, student := range students {
+		studentDto := web.StudentByClassDTO{
+			ID:   student.ID,
+			Name: *student.Name,
+			NISN: *student.NISN,
+		}
+		studentByClassDTOs = append(studentByClassDTOs, studentDto)
+	}
+	return studentByClassDTOs, nil
+}

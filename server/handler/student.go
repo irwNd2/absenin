@@ -56,3 +56,17 @@ func (h *StudentHandler) GetStudentByTeacherId(ctx *fiber.Ctx) error {
 	}
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": students})
 }
+
+func (h *StudentHandler) GetStudentByClassID(ctx *fiber.Ctx) error {
+	classIDParam := ctx.Params("classID")
+	teacherID, err := strconv.Atoi(classIDParam)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "bad request"})
+	}
+	students, err := h.Service.GetStudentByClassID(uint(teacherID))
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": students})
+
+}

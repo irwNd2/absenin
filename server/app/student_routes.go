@@ -19,5 +19,6 @@ func SetupStudentRoutes(app *fiber.App, db *gorm.DB) {
 	api := app.Group("/v1/student")
 	api.Post("/login", handler.AuthLogin)
 	api.Post("/register", handler.AddStudent)
-	api.Get("/all/:teacherID", handler.GetStudentByTeacherId)
+	api.Get("/all/class/:classID", handler.GetStudentByClassID)
+	api.Get("/all/teacher/:teacherID", handler.GetStudentByTeacherId)
 }
