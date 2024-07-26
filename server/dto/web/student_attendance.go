@@ -16,3 +16,14 @@ type GetStudentAttendanceByTeacherDTO struct {
 	Time                    *time.Time                        `json:"time"`
 	StudentAttendanceDetail *[]models.StudentAttendanceDetail `json:"student_attendance"`
 }
+
+type AddStudentAttendancePayload struct {
+	StudentClassID uint       `json:"student_class_id"`
+	SubjectID      uint       `json:"subject_id"`
+	TeacherID      uint       `json:"teacher_id"`
+	Time           *time.Time `json:"time"`
+}
+
+type AddStudentAttendanceResponse struct {
+	ID uint `json:"id"`
+}

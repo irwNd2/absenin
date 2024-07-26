@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/irwNd2/absenin/server/dto/web"
 	"github.com/irwNd2/absenin/server/models"
 	"github.com/irwNd2/absenin/server/repositories"
@@ -10,8 +12,16 @@ type StudentAttendanceService struct {
 	Repo *repositories.StudentAttendanceRepository
 }
 
-func (s *StudentAttendanceService) AddStudentAttendance(attendance *models.StudentAttendance) (*models.StudentAttendance, error) {
-	data, err := s.Repo.AddStudentAttendance(attendance)
+func (s *StudentAttendanceService) AddStudentAttendance(payload *web.AddStudentAttendancePayload, orgID uint) (*models.StudentAttendance, error) {
+	attendance := models.StudentAttendance{
+		SubjectID:      payload.SubjectID,
+		StudentClassID: payload.StudentClassID,
+		TeacherID:      payload.TeacherID,
+		OrganizationID: orgID,
+		Time:           *payload.Time,
+	}
+	data, err := s.Repo.AddStudentAttendance(&attendance)
+
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +36,8 @@ func (s *StudentAttendanceService) GetAllByTeacher(teacherID uint) ([]web.GetStu
 	var attendanceDTOs []web.GetStudentAttendanceByTeacherDTO
 
 	for _, attendance := range attendances {
-		attnedanceDTO := web.GetStudentAttendanceByTeacherDTO{
+		timeCopy := attendance.Time // makanya belajar pointer & reference terutama untuk type data primitif dan type struc kayak time.Time wkwk
+		attendanceDTO := web.GetStudentAttendanceByTeacherDTO{
 			ID:             attendance.ID,
 			StudentClassID: attendance.StudentClassID,
 			StudentClass: web.GetAllClassesDTO{
@@ -39,10 +50,14 @@ func (s *StudentAttendanceService) GetAllByTeacher(teacherID uint) ([]web.GetStu
 				Name: *attendance.Subject.Name,
 			},
 			TeacherID:               attendance.TeacherID,
-			Time:                    &attendance.Time,
+			Time:                    &timeCopy,
 			StudentAttendanceDetail: &attendance.StudentAttendanceDetail,
 		}
-		attendanceDTOs = append(attendanceDTOs, attnedanceDTO)
+		attendanceDTOs = append(attendanceDTOs, attendanceDTO)
+	}
+
+	for _, att := range attendanceDTOs {
+		fmt.Printf("%+v\n", att.Time)
 	}
 	return attendanceDTOs, nil
 }
