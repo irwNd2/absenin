@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/irwNd2/absenin/server/dto/web"
 	"github.com/irwNd2/absenin/server/models"
 	"github.com/irwNd2/absenin/server/repositories"
@@ -54,10 +52,6 @@ func (s *StudentAttendanceService) GetAllByTeacher(teacherID uint) ([]web.GetStu
 			StudentAttendanceDetail: &attendance.StudentAttendanceDetail,
 		}
 		attendanceDTOs = append(attendanceDTOs, attendanceDTO)
-	}
-
-	for _, att := range attendanceDTOs {
-		fmt.Printf("%+v\n", att.Time)
 	}
 	return attendanceDTOs, nil
 }
