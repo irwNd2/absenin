@@ -6,10 +6,15 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
+import { FontAwesome } from "@expo/vector-icons";
+
 const queryClient = new QueryClient();
 
+SplashScreen.preventAutoHideAsync();
 const InitialLayout = () => {
-  const { authState, initialized, authInfo } = useAuth();
+  const { authState, initialized } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
@@ -46,6 +51,26 @@ const InitialLayout = () => {
 };
 
 const RootLayout = () => {
+  const [loaded, error] = useFonts({
+    mon: require("../assets/fonts/Montserrat-Regular.ttf"),
+    "mon-bold": require("../assets/fonts/Montserrat-Bold.ttf"),
+    "mon-semi": require("../assets/fonts/Montserrat-SemiBold.ttf"),
+    ...FontAwesome.font,
+  });
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

@@ -1,3 +1,6 @@
+import { format, parseISO } from "date-fns";
+import { id } from "date-fns/locale";
+
 export const dateFormat = (date: Date) => {
   return date.toLocaleDateString("id-ID", {
     day: "2-digit",
@@ -33,4 +36,14 @@ export const combineDateTime = (date: Date, time: Date) => {
 
   // Return the combined date as an ISO string
   return combinedDate.toISOString();
+};
+
+export const formatDateWithDayName = (dateString: string): string => {
+  const date = parseISO(dateString);
+  return format(date, "EEEE, dd MMM yyyy", { locale: id });
+};
+
+export const getHour = (dateString: string): string => {
+  const date = parseISO(dateString);
+  return format(date, "HH:mm");
 };
