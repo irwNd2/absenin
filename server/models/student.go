@@ -10,7 +10,7 @@ type Student struct {
 	NISN                    *string                   `json:"nisn"`
 	ExpoToken               *string                   `json:"expo_token"`
 	ParentID                uint                      `json:"parent_id"`
-	Parent                  Parent                    `gorm:"foreignKey:ParentID"`
+	Parent                  *Parent                   `gorm:"foreignKey:ParentID"`
 	OrganizationID          uint                      `json:"org_id"`
 	StudentClassID          uint                      `json:"student_class_id"`
 	StudentAttendanceDetail []StudentAttendanceDetail `gorm:"foreignKey:StudentID"`

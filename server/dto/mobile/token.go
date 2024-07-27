@@ -16,3 +16,4 @@ type UpdateExpoTokenPayload struct {
 	UserID    uint   `json:"user_id"`
 	UserType  string `json:"user_type"`
 }
+

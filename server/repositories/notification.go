@@ -18,3 +18,17 @@ func (r *NotificationRepository) GetNotifByToken(token string) ([]models.Notific
 func (r *NotificationRepository) AddNotification(notif *models.Notification) error {
 	return r.DB.Create(&notif).Error
 }
+
+func (r *NotificationRepository) GetStudentByByID(studentID uint) (*models.Student, error) {
+	var student models.Student
+	err := r.DB.Preload("Parent").Where("id = ?", studentID).Find(&student).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return &student, nil
+}
+
+func (r *NotificationRepository) AddStudentAttendanceDetail(att *models.StudentAttendanceDetail) error {
+	return r.DB.Create(&att).Error
+}

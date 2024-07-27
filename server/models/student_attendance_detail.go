@@ -6,6 +6,8 @@ type StudentAttendanceDetail struct {
 	ID                  uint       `gorm:"primary key;autoIncrement" json:"id"`
 	StudentID           uint       `json:"student_id"`
 	StudentAttendanceID uint       `json:"student_attendance_id"`
+	IsPresent           bool       `json:"is_present"`
+	Reason              *string    `json:"reason"`
 	CreatedAt           time.Time  `json:"created_at"`
 	UpdatedAt           time.Time  `json:"updated_at"`
 	DeletedAt           *time.Time `gorm:"index" json:"deleted_at,omitempty"`

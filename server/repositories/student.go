@@ -46,3 +46,5 @@ func (r *StudentRepository) GetStudentByClassID(classID uint) ([]models.Student,
 	}
 	return students, nil
 }
+
+

@@ -35,6 +35,8 @@ func (s *StudentAttendanceService) GetAllByTeacher(teacherID uint) ([]web.GetStu
 
 	for _, attendance := range attendances {
 		timeCopy := attendance.Time // makanya belajar pointer & reference terutama untuk type data primitif dan type struc kayak time.Time wkwk
+		detailsCopy := make([]models.StudentAttendanceDetail, len(attendance.StudentAttendanceDetail))
+		copy(detailsCopy, attendance.StudentAttendanceDetail)
 		attendanceDTO := web.GetStudentAttendanceByTeacherDTO{
 			ID:             attendance.ID,
 			StudentClassID: attendance.StudentClassID,
@@ -49,7 +51,7 @@ func (s *StudentAttendanceService) GetAllByTeacher(teacherID uint) ([]web.GetStu
 			},
 			TeacherID:               attendance.TeacherID,
 			Time:                    &timeCopy,
-			StudentAttendanceDetail: &attendance.StudentAttendanceDetail,
+			StudentAttendanceDetail: &detailsCopy,
 		}
 		attendanceDTOs = append(attendanceDTOs, attendanceDTO)
 	}
