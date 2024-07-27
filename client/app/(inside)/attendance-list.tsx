@@ -7,11 +7,31 @@ import { StudentAttendance } from "@/types/Student";
 import Divider from "@/components/Divider";
 import Colors from "@/constants/Colors";
 import { formatDateWithDayName, getHour } from "@/utils/time";
+import useStudentAttendanceStore from "@/store/attendance";
 
 const AttendanceList = () => {
   const { data: attendanceData } = useAttendance();
-
+  const updateSujectID = useStudentAttendanceStore(
+    (state) => state.updateSubjectID
+  );
+  const updateClassID = useStudentAttendanceStore(
+    (state) => state.updateClassID
+  );
   const router = useRouter();
+
+  const toAttendanceDetail = ({
+    subjectID,
+    classID,
+    attendanceID,
+  }: {
+    subjectID: number;
+    classID: number;
+    attendanceID: number;
+  }) => {
+    updateClassID(classID);
+    updateSujectID(subjectID);
+    router.navigate(`/attendance/${attendanceID}`);
+  };
 
   if (!attendanceData) {
     return (
@@ -32,7 +52,13 @@ const AttendanceList = () => {
           renderItem={({ item }: { item: StudentAttendance }) => (
             <TouchableOpacity
               style={styles.listContainer}
-              onPress={() => router.navigate(`/attendance/${item.id}`)}
+              onPress={() =>
+                toAttendanceDetail({
+                  subjectID: item.subject_id,
+                  classID: item.student_class_id,
+                  attendanceID: item.id,
+                })
+              }
             >
               <View
                 style={{

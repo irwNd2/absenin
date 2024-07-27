@@ -19,6 +19,7 @@
     "@react-native-community/netinfo": "11.3.1",
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/native": "^6.0.2",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@shopify/flash-list": "1.6.4",
     "@tanstack/react-query": "^5.51.9",
     "axios": "^1.7.2",
@@ -59,7 +60,8 @@
     "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.10",
     "stream-chat-expo": "^5.33.1",
-    "stream-chat-react-native": "^5.33.1"
+    "stream-chat-react-native": "^5.33.1",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -23,6 +23,7 @@ import { AddStudentAttendancePayload } from "@/types/Student";
 import { useAuth } from "@/context/AuthContext";
 import QueryKey from "@/constants/QueryKey";
 import { router } from "expo-router";
+import useStudentAttendanceStore from "@/store/attendance";
 
 const AddAttendance = () => {
   const { data: subjectList } = useAllSubject();
@@ -74,6 +75,13 @@ const AddAttendance = () => {
 
   const { authInfo } = useAuth();
 
+  const updateSujectID = useStudentAttendanceStore(
+    (state) => state.updateSubjectID
+  );
+  const updateClassID = useStudentAttendanceStore(
+    (state) => state.updateClassID
+  );
+
   const addAttendance = useMutation({
     mutationFn: addStudentAttendance,
   });
@@ -92,6 +100,8 @@ const AddAttendance = () => {
       onSuccess: (res) => {
         router.back();
         const id = Number(res.data.data.id);
+        updateClassID(selectedClassID);
+        updateSujectID(selectedSubjectID);
         router.navigate(`/attendance/${id}`);
         setLoading(false);
         queryClient.invalidateQueries({

@@ -18,5 +18,6 @@ export const useStudentsByClassID = (
   return useQuery<StudentByClassID[], Error>({
     queryKey: [QueryKey.allStudentByClassID, classID],
     queryFn: () => getStudentByClassID(classID),
+    enabled: classID !== undefined,
   });
 };
