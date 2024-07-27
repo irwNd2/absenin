@@ -15,7 +15,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { combineDateTime, dateFormat, timeFormat } from "@/utils/time";
+import { dateFormat, timeFormat } from "@/utils/time";
 import Spinner from "react-native-loading-spinner-overlay";
 import { addStudentAttendance } from "@/api/attendance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -86,6 +86,10 @@ const AddAttendance = () => {
     mutationFn: addStudentAttendance,
   });
 
+  const updateAttendanceDetails = useStudentAttendanceStore(
+    (state) => state.updateStudentAttendanceDetail
+  );
+
   const queryClient = useQueryClient();
 
   const onAddStudentAttendance = async () => {
@@ -102,6 +106,7 @@ const AddAttendance = () => {
         const id = Number(res.data.data.id);
         updateClassID(selectedClassID);
         updateSujectID(selectedSubjectID);
+        updateAttendanceDetails(null);
         router.navigate(`/attendance/${id}`);
         setLoading(false);
         queryClient.invalidateQueries({

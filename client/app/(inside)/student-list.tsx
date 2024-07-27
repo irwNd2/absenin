@@ -34,25 +34,25 @@ const StudentList = () => {
     );
   };
 
-  const sendNotif = useMutation({
-    mutationFn: (payload: SendNotificationPayload[]) =>
-      sendNotification(payload),
-  });
+  // const sendNotif = useMutation({
+  //   mutationFn: (payload: SendNotificationPayload[]) =>
+  //     sendNotification(payload),
+  // });
 
   const confirm = () => {
-    const payload: SendNotificationPayload[] = [];
-    students.forEach((student: Student) => {
-      const notif: SendNotificationPayload = {
-        to: student.parent.expo_token ? student.parent.expo_token : null,
-        title: "Kehadiran Siswa",
-        body: student.is_checked
-          ? `Anak anda ${student.name} hadir di sekolah hari ini`
-          : `Anak anda ${student.name} tidak hadir di sekolah hari ini`,
-        user_id: `parent-${student.parent.id}`,
-      };
-      payload.push(notif);
-    });
-    sendNotif.mutate(payload);
+    // const payload: SendNotificationPayload[] = [];
+    // students.forEach((student: Student) => {
+    //   const notif: SendNotificationPayload = {
+    //     to: student.parent.expo_token ? student.parent.expo_token : null,
+    //     title: "Kehadiran Siswa",
+    //     body: student.is_checked
+    //       ? `Anak anda ${student.name} hadir di sekolah hari ini`
+    //       : `Anak anda ${student.name} tidak hadir di sekolah hari ini`,
+    //     user_id: `parent-${student.parent.id}`,
+    //   };
+    //   payload.push(notif);
+    // });
+    // sendNotif.mutate(payload);
   };
 
   if (isLoading) {

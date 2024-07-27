@@ -7,7 +7,9 @@ import { StudentAttendance } from "@/types/Student";
 import Divider from "@/components/Divider";
 import Colors from "@/constants/Colors";
 import { formatDateWithDayName, getHour } from "@/utils/time";
-import useStudentAttendanceStore from "@/store/attendance";
+import useStudentAttendanceStore, {
+  StudentAttendanceDetail,
+} from "@/store/attendance";
 
 const AttendanceList = () => {
   const { data: attendanceData } = useAttendance();
@@ -17,19 +19,26 @@ const AttendanceList = () => {
   const updateClassID = useStudentAttendanceStore(
     (state) => state.updateClassID
   );
+  const updateAttendanceDetails = useStudentAttendanceStore(
+    (state) => state.updateStudentAttendanceDetail
+  );
   const router = useRouter();
 
   const toAttendanceDetail = ({
     subjectID,
     classID,
     attendanceID,
+    detail,
   }: {
     subjectID: number;
     classID: number;
     attendanceID: number;
+    detail: any;
   }) => {
+    const details = detail as StudentAttendanceDetail[];
     updateClassID(classID);
     updateSujectID(subjectID);
+    updateAttendanceDetails(details);
     router.navigate(`/attendance/${attendanceID}`);
   };
 
@@ -42,6 +51,7 @@ const AttendanceList = () => {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       {attendanceData && (
@@ -57,6 +67,7 @@ const AttendanceList = () => {
                   subjectID: item.subject_id,
                   classID: item.student_class_id,
                   attendanceID: item.id,
+                  detail: item.student_attendance,
                 })
               }
             >
@@ -92,8 +103,16 @@ const AttendanceList = () => {
                 Mata Pelajaran • {item.subject.name}
               </Text>
               <Divider />
-              <Text style={{ color: "grey", fontFamily: "mon-semi" }}>
-                {item.student_attendance ? "Selesai" : "Belum Selesai"}
+              <Text
+                style={{
+                  color:
+                    item.student_attendance.length > 0 ? "green" : "orange",
+                  fontFamily: "mon-semi",
+                }}
+              >
+                {item.student_attendance.length > 0
+                  ? "Selesai"
+                  : "Belum Selesai"}
               </Text>
             </TouchableOpacity>
           )}
