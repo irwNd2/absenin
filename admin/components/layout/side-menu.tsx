@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import useActiveMenu from "@/hooks/useActiveMenu";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Menu = {
   title: string;
@@ -79,8 +79,6 @@ function SideMenu() {
   const menus = role === "admin" ? superAdminMenu : schoolOperator;
   const activeMenu = useActiveMenu(menus);
 
-  const router = useRouter();
-
   return (
     <div className='min-h-screen h-full max-w-[270px] w-full flex flex-col bg-gray-200 relative shadow-md p-4'>
       <div className='flex justify-center items-center py-2 border-b border-[#55686f]/20'>
@@ -96,7 +94,7 @@ function SideMenu() {
       <div className='flex flex-col gap-4 py-6 px-4'>
         {menus.map((el) => {
           return (
-            <div
+            <Link
               key={el.path}
               className={`flex gap-2 p-2 font-semibold ${
                 activeMenu?.path === el.path
@@ -104,11 +102,11 @@ function SideMenu() {
                   : ""
               }`}
               role='button'
-              onClick={() => router.push(el.path)}
+              href={el.path}
             >
               {el.icon}
               <p>{el.title}</p>
-            </div>
+            </Link>
           );
         })}
       </div>

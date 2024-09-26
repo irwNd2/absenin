@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import SideMenu from "@/components/layout/side-menu";
 import InsideWrapperPage from "@/components/layout/wrapper";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Absenin - Admin Panel",
+  title: "Admin Panel - Absenin",
   description: "Selamat datang di dalam dashboard Absenin",
 };
 

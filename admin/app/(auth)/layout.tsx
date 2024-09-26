@@ -4,8 +4,8 @@ import Logo from "@/assets/svgs/absenin-high-resolution-logo-transparent.svg";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Absenin - Login",
-  description: "Login untuk menggunakan dashboard Absenin",
+  title: "Masuk - Absenin",
+  description: "Masuk untuk menggunakan dashboard Absenin",
 };
 
 function AuthLayout({

@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Absenin - Homepage",
+  title: "Homepage - Absenin",
   description: "Selamat datang di aplikasi Absenin",
 };
 
