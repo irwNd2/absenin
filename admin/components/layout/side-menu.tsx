@@ -100,7 +100,7 @@ function SideMenu() {
               key={el.path}
               className={`flex gap-2 p-2 font-semibold ${
                 activeMenu?.path === el.path
-                  ? "bg-[#55686f] text-white rounded-lg shadow-xl"
+                  ? "bg-[#55686f]/60 text-white rounded-lg shadow-xl"
                   : ""
               }`}
               role='button'

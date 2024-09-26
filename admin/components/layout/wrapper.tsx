@@ -11,7 +11,7 @@ function InsideWrapperPage({
       <Breadcrumb />
       <div className='w-full h-full flex-grow flex flex-col justify-between'>
         {children}
-        <p className='my-1'>
+        <p className='my-1 text-sm'>
           © 2024, dibuat dengan ❤️ oleh{" "}
           <Link href='' className='font-bold'>
             PUBG Nyantai
