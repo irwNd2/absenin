@@ -24,6 +24,8 @@ function Breadcrumb() {
     });
   }, [pathArray]);
 
+  if (path === "/") return null;
+
   return (
     <nav>
       <ol className='flex space-x-1'>

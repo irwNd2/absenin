@@ -85,7 +85,12 @@ function SideMenu() {
     <div className='min-h-screen h-full max-w-[270px] w-full flex flex-col bg-gray-200 relative shadow-md p-4'>
       <div className='flex justify-center items-center py-2 border-b border-[#55686f]/20'>
         <Image src={AbseninLogo} width={50} height={50} alt='absenin-logo' />
-        <h1 className='font-bold text-lg text-[#55686f]'>Absenin App</h1>
+        <div className='flex flex-col'>
+          <h1 className='font-bold text-lg text-[#55686f]'>Absenin App</h1>
+          <p className='text-[9px] -mt-1 text-gray-500'>
+            Monitor siswa dalam satu aplikasi
+          </p>
+        </div>
       </div>
 
       <div className='flex flex-col gap-4 py-6 px-4'>
@@ -93,7 +98,7 @@ function SideMenu() {
           return (
             <div
               key={el.path}
-              className={`flex gap-2 p-2 ${
+              className={`flex gap-2 p-2 font-semibold ${
                 activeMenu?.path === el.path
                   ? "bg-[#55686f] text-white rounded-lg shadow-xl"
                   : ""
@@ -124,7 +129,9 @@ function SideMenu() {
             <p className='text-[#55686f] font-bold'>
               {role === "admin" ? "Super Admin" : "Operator Sekolah"}
             </p>
-            <h4 className='text-gray-700 text-xs'>admin-test@gmail.com</h4>
+            <h4 className='text-gray-700 text-xs -mt-0.5'>
+              admin-test@gmail.com
+            </h4>
           </div>
         </div>
       </div>

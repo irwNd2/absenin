@@ -13,9 +13,9 @@ function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='flex min-h-screen min-w-screen flex-grow w-full h-full'>
+    <div className='flex min-h-screen min-w-screen flex-grow w-full h-full overflow-hidden'>
       <SideMenu />
-      <div className='min-h-screen w-full'>
+      <div className='min-h-screen max-h-screen w-full'>
         <InsideWrapperPage>{children}</InsideWrapperPage>
       </div>
     </div>
