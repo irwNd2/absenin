@@ -52,11 +52,9 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 		}
 
 		if student.Parent.ExpoToken == nil {
-			fmt.Println("ExpoToken is nil for parent of student ID:", payload.StudentID)
 			// Add the notification to the table
 			err := s.AddNotification(&notifPayload)
 			if err != nil {
-				fmt.Println("Error adding notification:", err)
 				return err
 			}
 
@@ -70,7 +68,6 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 
 			err = s.Repo.AddStudentAttendanceDetail(&studentAttDetail)
 			if err != nil {
-				fmt.Println("Error adding student attendance detail:", err)
 				return err
 			}
 
@@ -79,7 +76,6 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 
 		pushToken, err := expo.NewExponentPushToken(*student.Parent.ExpoToken)
 		if err != nil {
-			fmt.Println("Error creating push token:", err)
 			continue
 		}
 
@@ -94,7 +90,6 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 			},
 		)
 		if err != nil {
-			fmt.Println("Error publishing push message:", err)
 			return err
 		}
 
@@ -108,7 +103,6 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 		notifPayload.ToExpoToken = *student.Parent.ExpoToken
 		err = s.AddNotification(&notifPayload)
 		if err != nil {
-			fmt.Println("Error adding notification:", err)
 			return err
 		}
 
@@ -122,7 +116,6 @@ func (s *NotificationService) SendNotificationToSingleId(p []*models.StudentAtte
 
 		err = s.Repo.AddStudentAttendanceDetail(&studentAttDetail)
 		if err != nil {
-			fmt.Println("Error adding student attendance detail:", err)
 			return err
 		}
 	}

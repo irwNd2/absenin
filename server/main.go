@@ -35,6 +35,7 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 
+	apps.SetupAdminRoutes(app, db)
 	apps.SetupParentRoutes(app, db)
 	apps.SetupStudentRoutes(app, db)
 	apps.SetupTeacherRoutes(app, db)

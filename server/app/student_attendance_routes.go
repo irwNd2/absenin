@@ -17,7 +17,7 @@ func SetupStudentAttendanceRoutes(app *fiber.App, db *gorm.DB) {
 			},
 		},
 	}
-	app.Use(middlewares.AuthMiddleware)
+	app.Use(middlewares.AuthMiddleware(""))
 	api := app.Group("/v1/attendance")
 	api.Post("/add", h.AddStudentAttendance)
 	api.Get("/teacher", h.GetAllByTeacher)

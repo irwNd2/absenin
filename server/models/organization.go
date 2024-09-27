@@ -12,6 +12,7 @@ type Organization struct {
 	Subject           []Subject           `gorm:"foreignKey:OrganizationID"`
 	StudentClass      []StudentClass      `gorm:"foreignKey:OrganizationID"`
 	StudentAttendance []StudentAttendance `gorm:"foreignKey:OrganizationID"`
+	OrgAdmin          []OrgAdmin          `gorm:"foreignKey:OrganizationID"`
 	CreatedAt         time.Time           `json:"created_at"`
 	UpdatedAt         time.Time           `json:"updated_at"`
 	DeletedAt         *time.Time          `gorm:"index" json:"deleted_at,omitempty"`
