@@ -9,17 +9,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupAdminRoutes(app *fiber.App, db *gorm.DB) {
-	handler := &handlers.AdminHandler{
-		AdminService: &services.AdminService{
-			Repo: &repositories.AdminRepository{
+func SetupOrgRoutes(app *fiber.App, db *gorm.DB) {
+	handler := &handlers.OrganizationHandler{
+		Service: &services.OrganizationService{
+			Repo: &repositories.OrganizationRepository{
 				DB: db,
 			},
 		},
 	}
 
-	api := app.Group("/v1/admin")
-	api.Post("/login", handler.AdminLogin)
+	api := app.Group("/v1/org")
 	app.Use(middlewares.AuthMiddleware("Admin"))
-	api.Post("/add/:role", handler.AddAdmin)
+	api.Post("/add", handler.AddOrg)
+	api.Get("/all", handler.GetAllOrg)
 }

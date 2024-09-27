@@ -17,7 +17,7 @@ func SetupStudentClassRoutes(app *fiber.App, db *gorm.DB) {
 			},
 		},
 	}
-	app.Use(middlewares.AuthMiddleware)
+	app.Use(middlewares.AuthMiddleware(""))
 	api := app.Group("/v1/class")
 	api.Get("/all", handler.GetAllClasses)
 }

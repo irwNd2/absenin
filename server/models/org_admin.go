@@ -5,7 +5,7 @@ import "time"
 type OrgAdmin struct {
 	ID             uint       `gorm:"primary key;autoIncrement" json:"id"`
 	Name           string     `json:"name"`
-	NISN           string     `json:"nisn"`
+	NIP           string     `json:"nip"`
 	Email          string     `gorm:"unique" json:"email" binding:"required"`
 	Password       string     `gorm:"not null" json:"password" binding:"required"`
 	OrganizationID uint       `json:"org_id"`

@@ -13,9 +13,17 @@ func NewAccessToken(claim web.Claims) (string, error) {
 }
 
 func ParseAccessToken(accessToken string) *web.Claims {
-	parsedAccessToken, _ := jwt.ParseWithClaims(accessToken, &web.Claims{}, func(t *jwt.Token) (interface{}, error) {
+	parsedAccessToken, err := jwt.ParseWithClaims(accessToken, &web.Claims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("SECRET_JWT")), nil
 	})
 
-	return parsedAccessToken.Claims.(*web.Claims)
+	if err != nil || !parsedAccessToken.Valid {
+		return nil
+	}
+
+	if claims, ok := parsedAccessToken.Claims.(*web.Claims); ok {
+		return claims
+	}
+
+	return nil
 }
