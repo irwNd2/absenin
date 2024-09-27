@@ -31,10 +31,10 @@ func (h *OrganizationHandler) AddOrg(ctx *fiber.Ctx) error {
 
 func (h *OrganizationHandler) GetAllOrg(ctx *fiber.Ctx) error {
 	page, err := strconv.Atoi(ctx.Query("page"))
-
 	if err != nil || page < 1 {
 		page = 1
 	}
+
 	limit, err := strconv.Atoi(ctx.Query("limit"))
 	if err != nil || limit < 1 {
 		limit = 10
