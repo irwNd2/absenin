@@ -16,10 +16,16 @@ func SetupAdminRoutes(app *fiber.App, db *gorm.DB) {
 				DB: db,
 			},
 		},
+		OrgAdminService: &services.OrgAdminService{
+			Repo: &repositories.OrgAdminRepository{
+				DB: db,
+			},
+		},
 	}
 
 	api := app.Group("/v1/admin")
 	api.Post("/login", handler.AdminLogin)
 	app.Use(middlewares.AuthMiddleware("Admin"))
 	api.Post("/add/:role", handler.AddAdmin)
+	api.Get("/operator", handler.GetAllOrgAdmin)
 }

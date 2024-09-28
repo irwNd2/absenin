@@ -35,6 +35,7 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 
+	apps.SetupAdminRoutes(app, db)
 	apps.SetupParentRoutes(app, db)
 	apps.SetupStudentRoutes(app, db)
 	apps.SetupTeacherRoutes(app, db)
@@ -43,7 +44,6 @@ func main() {
 	apps.SetupSubjectRoutes(app, db)
 	apps.SetupStudentClassRoutes(app, db)
 	apps.SetupStudentAttendanceRoutes(app, db)
-	apps.SetupAdminRoutes(app, db)
 	apps.SetupOrgRoutes(app, db)
 
 	port := os.Getenv("PORT")
