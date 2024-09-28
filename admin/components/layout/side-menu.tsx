@@ -1,21 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
 import AbseninLogo from "@/assets/absenin-favicon-color.svg";
 import Image from "next/image";
 import {
   BookOpen,
   CircleUser,
   LayoutDashboard,
+  LogOut,
   School,
   SquareUserRound,
   UserPen,
   Users,
   Warehouse,
 } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import useActiveMenu from "@/hooks/useActiveMenu";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { deleteSession, TokenInfo } from "@/lib/session";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 type Menu = {
   title: string;
@@ -23,8 +26,6 @@ type Menu = {
   path: string;
 };
 function SideMenu() {
-  const [role, setRole] = useState<"admin" | "operator">("admin");
-
   const superAdminMenu: Menu[] = [
     {
       title: "Dashboard",
@@ -76,8 +77,16 @@ function SideMenu() {
     },
   ];
 
-  const menus = role === "admin" ? superAdminMenu : schoolOperator;
+  const cookie = Cookies.get("jwt");
+  const session: TokenInfo = jwtDecode(cookie!);
+
+  const menus = session.role === "Admin" ? superAdminMenu : schoolOperator;
   const activeMenu = useActiveMenu(menus);
+
+  const logout = () => {
+    deleteSession();
+    Cookies.remove("jwt");
+  };
 
   return (
     <div className='min-h-screen h-full max-w-[270px] w-full flex flex-col bg-gray-200 relative shadow-md p-4'>
@@ -90,47 +99,44 @@ function SideMenu() {
           </p>
         </div>
       </div>
-
-      <div className='flex flex-col gap-4 py-6 px-4'>
-        {menus.map((el) => {
-          return (
-            <Link
-              key={el.path}
-              className={`flex gap-2 p-2 font-semibold ${
-                activeMenu?.path === el.path
-                  ? "bg-[#55686f]/60 text-white rounded-lg shadow-xl"
-                  : ""
-              }`}
-              role='button'
-              href={el.path}
-            >
-              {el.icon}
-              <p>{el.title}</p>
-            </Link>
-          );
-        })}
-      </div>
-      <div className='absolute bottom-3 left-[10%]'>
-        <Tabs defaultValue='admin' className='w-full '>
-          <TabsList className=''>
-            <TabsTrigger value='admin' onClick={() => setRole("admin")}>
-              Admin
-            </TabsTrigger>
-            <TabsTrigger value='operator' onClick={() => setRole("operator")}>
-              Operator Sekolah
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <div className='flex gap-2 items-center mt-4'>
-          <CircleUser className='text-[#55686f] w-10 h-10' />
-          <div className='flex flex-col '>
-            <p className='text-[#55686f] font-bold'>
-              {role === "admin" ? "Super Admin" : "Operator Sekolah"}
-            </p>
-            <h4 className='text-gray-700 text-xs -mt-0.5'>
-              admin-test@gmail.com
-            </h4>
+      <div className='flex flex-col justify-between flex-grow'>
+        <div className='flex flex-col gap-4 py-6 px-4'>
+          {menus.map((el) => {
+            return (
+              <Link
+                key={el.path}
+                className={`flex gap-2 p-2 font-semibold ${
+                  activeMenu?.path === el.path
+                    ? "bg-[#55686f]/60 text-white rounded-lg shadow-xl"
+                    : ""
+                }`}
+                role='button'
+                href={el.path}
+              >
+                {el.icon}
+                <p>{el.title}</p>
+              </Link>
+            );
+          })}
+        </div>
+        <div className=' flex justify-between items-center'>
+          <div className='flex gap-2 items-center'>
+            <CircleUser className='text-[#55686f] w-10 h-10' />
+            <div className='flex flex-col '>
+              <p className='text-[#55686f] font-bold'>
+                {session.role === "Admin" ? "Admin" : "Operator Sekolah"}
+              </p>
+              <h4 className='text-gray-700 text-xs -mt-0.5'>{session.name}</h4>
+            </div>
           </div>
+          <Button
+            variant={"ghost"}
+            className='flex p-0 hover:bg-transparent'
+            title='Keluar'
+            onClick={logout}
+          >
+            <LogOut className='h-6 text-red-600/60' />
+          </Button>
         </div>
       </div>
     </div>

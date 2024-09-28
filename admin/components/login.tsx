@@ -6,9 +6,13 @@ import ButtonLoader from "@/assets/button-loader.gif";
 import Image from "next/image";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { useRouter } from "next/navigation";
+import { useLogin } from "@/lib/react-query/useAuth";
+import { LoginPayload } from "@/lib/api/auth";
+import { createSession } from "@/lib/session";
+import Cookies from "js-cookie";
 
 function LoginComponent() {
-  const [role, setRole] = useState<"admin" | "operator">("admin");
+  const [role, setRole] = useState<"Admin" | "Operator">("Admin");
   const router = useRouter();
 
   return (
@@ -19,10 +23,10 @@ function LoginComponent() {
       <div className='flex flex-col'>
         <Tabs defaultValue='admin' className='w-full lg:mt-5'>
           <TabsList className=''>
-            <TabsTrigger value='admin' onClick={() => setRole("admin")}>
+            <TabsTrigger value='admin' onClick={() => setRole("Admin")}>
               Admin
             </TabsTrigger>
-            <TabsTrigger value='operator' onClick={() => setRole("operator")}>
+            <TabsTrigger value='operator' onClick={() => setRole("Operator")}>
               Operator Sekolah
             </TabsTrigger>
           </TabsList>
@@ -48,7 +52,7 @@ function LoginComponent() {
 }
 
 type FormProps = {
-  role: "admin" | "operator";
+  role: "Admin" | "Operator";
 };
 
 const UserForm = ({ role }: FormProps) => {
@@ -62,13 +66,29 @@ const UserForm = ({ role }: FormProps) => {
     setIsFormCompleted(!!form);
   }, [email, password]);
 
+  const { mutate: login } = useLogin();
+
   const onLogin = async () => {
-    console.log(role);
     setSubmitting(true);
     setIsFormCompleted(false);
-    await new Promise((resolve) => setTimeout(resolve, 4000));
-    setSubmitting(false);
-    setIsFormCompleted(true);
+    const payload: LoginPayload = {
+      email,
+      password,
+      role,
+    };
+
+    login(payload, {
+      onSuccess: async (data) => {
+        await createSession(data?.access_token);
+        Cookies.set("jwt", data?.access_token)
+        setSubmitting(false);
+        setIsFormCompleted(true);
+      },
+      onError: () => {
+        setSubmitting(false);
+        setIsFormCompleted(true);
+      },
+    });
   };
 
   return (
