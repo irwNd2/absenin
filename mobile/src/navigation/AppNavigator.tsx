@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +16,7 @@ import NewAttendanceScreen from '../screens/NewAttendanceScreen';
 import AttendanceDetailScreen from '../screens/AttendanceDetailScreen';
 import EditAttendanceScreen from '../screens/EditAttendanceScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type RootStackParamList = {
   Auth: undefined;
@@ -67,6 +68,30 @@ const TabNavigator = () => {
 
 const AppNavigator = () => {
   const { isAuthenticated } = useAuth();
+  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkFirstLaunch = async () => {
+      try {
+        const hasLaunched = await AsyncStorage.getItem('hasLaunched');
+        if (hasLaunched === null) {
+          await AsyncStorage.setItem('hasLaunched', 'true');
+          setIsFirstLaunch(true);
+        } else {
+          setIsFirstLaunch(false);
+        }
+      } catch (error) {
+        console.error('Error checking first launch:', error);
+        setIsFirstLaunch(false);
+      }
+    };
+
+    checkFirstLaunch();
+  }, []);
+
+  if (isFirstLaunch === null) {
+    return null; // or a loading screen
+  }
 
   return (
     <NavigationContainer>
@@ -76,7 +101,9 @@ const AppNavigator = () => {
           headerTitle: () => null,
         }}
       >
-        {!isAuthenticated ? (
+        {isFirstLaunch ? (
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        ) : !isAuthenticated ? (
           <Stack.Screen name="Auth" component={LoginScreen} />
         ) : (
           <>
