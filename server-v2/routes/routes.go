@@ -33,7 +33,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		class := protected.Group("/classes")
 		{
 			class.GET("", classHandler.GetClasses)
-			class.GET("/:className/students", classHandler.GetClassStudents)
+			class.GET("/:classId/students", classHandler.GetClassStudents)
 		}
 
 		// Attendance routes

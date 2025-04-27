@@ -27,14 +27,14 @@ func (h *ClassHandler) GetClasses(c *gin.Context) {
 }
 
 func (h *ClassHandler) GetClassStudents(c *gin.Context) {
-	className := c.Param("className")
-	if className == "" {
+	classID := c.Param("classId")
+	if classID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Class name is required"})
 		return
 	}
 
 	var class models.Class
-	if err := h.db.Preload("Students").Where("name = ?", className).First(&class).Error; err != nil {
+	if err := h.db.Preload("Students").Where("id = ?", classID).First(&class).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Class not found"})
 		return
 	}
