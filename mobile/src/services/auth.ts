@@ -107,32 +107,32 @@ class AuthService {
 export const authService = AuthService.getInstance();
 
 // React Query hooks
-export const useLoginMutation = () => {
-  return useMutation({
-    mutationFn: (credentials: LoginCredentials) => authService.login(credentials),
-  });
-};
+// export const useLoginMutation = () => {
+//   return useMutation({
+//     mutationFn: (credentials: LoginCredentials) => authService.login(credentials),
+//   });
+// };
 
-export const login = async (credentials: LoginCredentials): Promise<User> => {
-  try {
-    const response = await axios.post(`${API_URL}/api/auth/login`, credentials);
-    const userData = response.data;
+// export const login = async (credentials: LoginCredentials): Promise<User> => {
+//   try {
+//     const response = await axios.post(`${API_URL}/api/auth/login`, credentials);
+//     const userData = response.data;
     
-    // Ensure the response includes all required fields
-    const user: User = {
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      phoneNumber: userData.phone_number,
-      role: userData.role,
-      subjects: userData.subjects,
-      organization: userData.organization,
-      token: userData.token,
-    };
+//     // Ensure the response includes all required fields
+//     const user: User = {
+//       id: userData.id,
+//       name: userData.name,
+//       email: userData.email,
+//       phoneNumber: userData.phone_number,
+//       role: userData.role,
+//       subjects: userData.subjects,
+//       organization: userData.organization,
+//       token: userData.token,
+//     };
     
-    return user;
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
-}; 
+//     return user;
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     throw error;
+//   }
+// }; 

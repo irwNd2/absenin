@@ -13,38 +13,23 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { useAttendance } from '../hooks/useAttendance';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { format } from 'date-fns';
 import type { Attendance } from '../types/attendance';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../contexts/AuthContext';
+import { getAttendanceByTeacher } from '../services/attendance';
 
 const AttendanceScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { attendances, loading, error, fetchAttendances, removeAttendance } = useAttendance();
+  const { user } = useAuth()
 
-  useEffect(() => {
-    fetchAttendances();
-  }, [fetchAttendances]);
+  if (!user) return null;
+
+  const { data: attendances, error, isFetching: loading, refetch } = useQuery({ queryKey: ['attendances'], queryFn: () => getAttendanceByTeacher(user.id), enabled: !!user.id });
 
   const handleDelete = async (id: string) => {
-    Alert.alert(
-      'Delete Attendance',
-      'Are you sure you want to delete this attendance record?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await removeAttendance(id);
-            } catch (err) {
-              Alert.alert('Error', 'Failed to delete attendance record');
-            }
-          },
-        },
-      ]
-    );
+   console.log('delete attendance with ID:', id);
   };
 
   const renderAttendanceItem = ({ item }: { item: Attendance }) => (
@@ -88,8 +73,8 @@ const AttendanceScreen = () => {
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={fetchAttendances}>
+        <Text style={styles.errorText}>{error.message}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
           <Text style={styles.retryButtonText}>Retry</Text>
         </TouchableOpacity>
       </SafeAreaView>

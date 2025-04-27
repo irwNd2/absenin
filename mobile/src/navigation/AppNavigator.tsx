@@ -14,7 +14,6 @@ import AttendanceScreen from '../screens/AttendanceScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import NewAttendanceScreen from '../screens/NewAttendanceScreen';
 import AttendanceDetailScreen from '../screens/AttendanceDetailScreen';
-import EditAttendanceScreen from '../screens/EditAttendanceScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -110,7 +109,7 @@ const AppNavigator = () => {
             <Stack.Screen name="MainTabs" component={TabNavigator} />
             <Stack.Screen name="NewAttendance" component={NewAttendanceScreen} />
             <Stack.Screen name="AttendanceDetail" component={AttendanceDetailScreen} />
-            <Stack.Screen name="EditAttendance" component={EditAttendanceScreen} />
+            {/* <Stack.Screen name="EditAttendance" component={EditAttendanceScreen} /> */}
           </>
         )}
       </Stack.Navigator>

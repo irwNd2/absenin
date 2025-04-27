@@ -21,16 +21,18 @@ attendanceApi.interceptors.request.use(
   }
 );
 
-export const createAttendance = async (data: {
-  teacherId: string;
-  subject: string;
-  className: string;
-  date: string;
-  students: Array<{
-    studentId: string;
-    status: 'present' | 'sick' | 'absent';
-  }>;
-}) => {
+export type AttendancePayload = {
+    teacherId: string;
+    subject: string;
+    className: string;
+    date: string;
+    students: Array<{
+      studentId: string;
+      status: 'present' | 'sick' | 'absent';
+    }>;
+}
+
+export const createAttendance = async (data: AttendancePayload) => {
   const response = await attendanceApi.post<Attendance>('', data);
   return response.data;
 };

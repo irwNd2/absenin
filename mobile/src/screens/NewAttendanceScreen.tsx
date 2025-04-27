@@ -13,95 +13,49 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { useAttendance } from '../hooks/useAttendance';
 import { useAuth } from '../contexts/AuthContext';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { format } from 'date-fns';
 import type { Class, Student } from '../types/class';
-import axios from 'axios';
-import { API_URL } from '../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getClasses, getStudentsInClass } from '../services/classes';
+import { AttendancePayload, createAttendance } from '../services/attendance';
 
 type NewAttendanceScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'NewAttendance'>;
 
 const NewAttendanceScreen = () => {
   const navigation = useNavigation<NewAttendanceScreenNavigationProp>();
-  const { addAttendance } = useAttendance();
   const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [classes, setClasses] = useState<Class[]>([]);
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedTime, setSelectedTime] = useState(new Date());
+
+  const queryClient = useQueryClient()
+  const { mutate: mutateAttendance } = useMutation({
+    mutationFn: (attendance: AttendancePayload) => createAttendance(attendance), 
+    onSuccess: () => {
+      Alert.alert('Success', 'Attendance created successfully!');
+      queryClient.invalidateQueries({ queryKey: ['attendances'] });
+      navigation.goBack();
+    },
+    onError: (error) => {
+      Alert.alert('Error', error.message || 'An error occurred while creating attendance.');
+    },
+  })
+
+  const { data: classes, isFetching: isClassLoading } = useQuery({ queryKey: ['classes'], queryFn: getClasses });
+
+  const { data: studentData } = useQuery({ queryKey: ['students'], queryFn: () => getStudentsInClass(selectedClass?.ID!), enabled: !!selectedClass?.ID && step === 2, });
 
   useEffect(() => {
-    fetchClasses();
-  }, []);
-
-  const fetchClasses = async () => {
-    try {
-      if (!user?.token) {
-        Alert.alert('Error', 'Authentication token is missing');
-        return;
-      }
-
-      const response = await axios.get(`${API_URL}/api/classes`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      setClasses(response.data);
-    } catch (error) {
-      console.error('Error fetching classes:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Error response:', error.response?.data);
-        console.error('Error status:', error.response?.status);
-        console.error('Error headers:', error.response?.headers);
-      }
-      Alert.alert('Error', 'Failed to fetch classes');
+    if (studentData) {
+      setStudents(studentData);
     }
-  };
-
-  const fetchStudents = async (className: string) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/classes/${className}/students`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      console.log('Students response:', response.data);
-      // Map the server response to our Student type
-      const mappedStudents: Student[] = response.data.map((student: Student) => ({
-        ID: student.ID,
-        Name: student.Name,
-      }));
-      setStudents(mappedStudents);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Error response:', error.response?.data);
-        console.error('Error status:', error.response?.status);
-      }
-      Alert.alert('Error', 'Failed to fetch students');
-    }
-  };
-
-  const handleNext = async () => {
-    if (!selectedClass) {
-      Alert.alert('Error', 'Please select a class');
-      return;
-    }
-    if (!selectedSubject) {
-      Alert.alert('Error', 'Please select a subject');
-      return;
-    }
-    await fetchStudents(selectedClass.Name);
-    setStep(2);
-  };
+  }, [studentData])
 
   const handleStudentStatusChange = (studentId: string, status: 'present' | 'sick' | 'absent') => {
     setStudents(prevStudents => 
@@ -123,39 +77,16 @@ const NewAttendanceScreen = () => {
       return;
     }
 
-    try {
-      await addAttendance({
+    mutateAttendance({
         teacherId: user?.id || '',
         subject: selectedSubject,
         className: selectedClass.Name,
-        date: `${format(selectedDate, 'yyyy-MM-dd')}T${format(selectedDate, 'HH:mm')}`,
+        date: `${format(selectedDate, 'yyyy-MM-dd')}T${format(selectedTime, 'HH:mm')}`,
         students: students.map(student => ({
           studentId: student.ID,
           status: student.status || 'absent',
         })),
       });
-      navigation.goBack();
-    } catch (err) {
-      Alert.alert('Error', 'Failed to create attendance record');
-    }
-  };
-
-  const onDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setSelectedDate(selectedDate);
-    }
-  };
-
-  const onTimeChange = (event: any, selectedTime?: Date) => {
-    setShowTimePicker(false);
-    if (selectedTime) {
-      // Keep the selected date but update the time
-      const newDate = new Date(selectedDate);
-      newDate.setHours(selectedTime.getHours());
-      newDate.setMinutes(selectedTime.getMinutes());
-      setSelectedDate(newDate);
-    }
   };
 
   const renderStep1 = () => (
@@ -190,7 +121,7 @@ const NewAttendanceScreen = () => {
       <View style={styles.formGroup}>
         <Text style={styles.label}>Class</Text>
         <View style={styles.classesContainer}>
-          {classes.map(classItem => (
+          {classes?.map((classItem: Class) => (
             <TouchableOpacity
               key={classItem.ID}
               style={[
@@ -214,22 +145,22 @@ const NewAttendanceScreen = () => {
 
       <View style={styles.formGroup}>
         <Text style={styles.label}>Date</Text>
-        <TouchableOpacity
-          style={styles.input}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text>{format(selectedDate, 'MMMM d, yyyy')}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Hour</Text>
-        <TouchableOpacity
-          style={styles.input}
-          onPress={() => setShowTimePicker(true)}
-        >
-          <Text>{format(selectedDate, 'h:mm a')}</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row'}}>
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={(_, date) => setSelectedDate(date!)}
+            />
+          <DateTimePicker
+            value={selectedTime}
+            mode="time"
+            is24Hour={true}
+            display="default"
+            onChange={(_, time) => setSelectedTime(time!)}
+            />
+        </View>
       </View>
 
       <TouchableOpacity 
@@ -239,7 +170,7 @@ const NewAttendanceScreen = () => {
           styles.nextButton,
           (!selectedSubject || !selectedClass) && styles.buttonDisabled
         ]} 
-        onPress={handleNext}
+        onPress={() => setStep(2)}
         disabled={!selectedSubject || !selectedClass}
       >
         <Text style={[
